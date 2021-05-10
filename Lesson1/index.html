@@ -107,5 +107,54 @@
             </div>
         </div>
     </article>
+    <article class="degustation">
+        <form class="degustation__form">
+            <h2 class="degustation__title">Запись на дегустацию</h2>
+            <div class="degustation__row">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Feugiat enim tortor in hac id imperdiet adipiscing. Pellentesque nisi, mi sit non sit sed fermentum.
+            </div>
+
+            <div class="degustation__row">
+                <div>
+                    <label>
+                        Имя:
+                        <input
+                            required
+                            type="text"
+                            name="name"/>
+                    </label>
+                </div>
+
+                <div>
+                    <label>
+                        Телефон:
+                        <input
+                            required
+                            type="tel"
+                            name="phone"
+                            placeholder="+380 (ХХ) ХХХ-ХХ-ХХ" />
+                    </label>
+                </div>
+            </div>
+
+            <div class="degustation__row">
+                <select required name="place">
+                    <option value="Новокузнечный переулок 4/1">
+                        Новокузнечный переулок 4/1
+                    </option>
+                    <option value="2">
+                        Бутик на Невском 103
+                    </option>
+                    <option value="3">
+                        Ближайшая дегустация в любом месте
+                    </option>
+                </select>
+            </div>
+
+            <div class="degustation__row">
+                <button type="submit">записаться</button>
+            </div>
+        </form>
+    </article>
 </body>
 </html>

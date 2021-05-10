@@ -291,6 +291,8 @@ a:focus {
 }
 
 .annotation__title {
+    position: relative;
+
     margin: 0 auto 80px;
 
     max-width: 736px;
@@ -304,9 +306,23 @@ a:focus {
     line-height: 1.5;
 }
 
-/* TODO: add after position lessons */
 .annotation__title::after {
     content: '';
+
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    /* left: calc((100% - 200px) / 2); */
+    /* left: 39.13%; */
+
+    display: block;
+    box-sizing: border-box;
+
+    /* width: 21.74%; */
+    width: 200px;
+    border-top: 1px solid #FFFFFF;
+
+    transform: translateX(-50%);
 }
 
 .annotation__description {
@@ -366,7 +382,7 @@ a:focus {
 }
 
 .collection__title {
-    /* h2 / 36b */
+    position: relative;
 
     font-family: 'Playfair Display', serif;
     font-style: normal;
@@ -376,6 +392,21 @@ a:focus {
 
     max-width: 300px;
     margin: 30px 0 60px;
+}
+
+.collection__title::after {
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+
+    display: block;
+    box-sizing: border-box;
+
+    width: 160px;
+
+    content: '';
+
+    border-top: 1px solid #282828;
 }
 
 .collection__description {
@@ -468,4 +499,78 @@ a:focus {
     object-position: center;
 
     display: block;
+}
+
+.degustation {
+    background: #282828;
+    padding: 129px 24px 100px;
+
+    display: flex;
+    justify-content: center;
+}
+
+.degustation__form {
+    position: relative;
+
+    box-sizing: border-box;
+    max-width: 1110px;
+    flex: 0 0 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 105px 0 80px;
+
+    border: 3px solid #C4C4C4;
+}
+
+.degustation__form::before {
+    content: '';
+
+    position: absolute;
+    top: -69px;
+    left: -30px;
+
+    width: 260px;
+    height: 260px;
+
+    background: #282828 url('img/formleft.jpg') center center no-repeat;
+    background-size: contain;
+}
+
+.degustation__form::after {
+    content: '';
+
+    position: absolute;
+    top: -65px;
+    right: -53px;
+
+    width: 260px;
+    height: 200px;
+
+    background: #282828 url('img/formright.jpg') center center no-repeat;
+    background-size: contain;
+}
+
+.degustation__row {
+    max-width: 539px;
+    width: 100%;
+}
+
+.degustation__title {
+    position: absolute;
+    top: 0;
+    left: 50%;
+
+    transform: translateX(-50%) translateY(-1px) translateY(-50%);
+
+    width: 100%;
+    max-width: 490px;
+
+    text-align: center;
+
+    background: #282828;
+
+    margin: 0;
 }
