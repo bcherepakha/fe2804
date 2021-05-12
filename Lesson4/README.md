@@ -16,3 +16,7 @@
 * [Отзывчивые изображения на практике (Часть 3)](https://habr.com/ru/company/paysto/blog/244241/)
 * [Оптимизация графики для веба: самое важное](https://habr.com/ru/post/422531/)
 * [Screen Sizes | Viewport Sizes and Pixel Densities for Popular Devices](https://screensiz.es/)
+
+## Домашнее задание
+
+* Сверстать подходом "mobile first" по [условию](./media-queries-practice.md)
