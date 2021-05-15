@@ -18,14 +18,174 @@
         }
 
         .month-view {
-            flex: 802 0 0;
+            flex: 799 0 0;
+
+            /* 100% = 2334px */
+            /* x    = 102px */
+            padding: 0 4.37% 0 4.11%;
+
+            box-sizing: border-box;
 
             background: rgba(42, 46, 65, 0.7);
+        }
+
+        .calendar__header {
+            padding: 84px 0;
+
+            box-sizing: border-box;
+
+            display: flex;
+
+            position: relative;
+        }
+
+        .calendar__header::before,
+        .calendar__header::after {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            content: '';
+
+            mix-blend-mode: normal;
+
+            width: 100%;
+            height: 2px;
+        }
+
+        .calendar__header::before {
+            background: #000000;
+            opacity: 0.17;
+        }
+
+        .calendar__header::after {
+            bottom: -2px;
+            background: #FFFFFF;
+            opacity: 0.13;
+        }
+
+        .calendar__title {
+            flex: 1 0 0;
+            order: 2;
+
+            text-align: center;
+
+            font-size: 36px;
+            line-height: 42px;
+
+            text-align: center;
+
+            color: #FFFFFF;
+        }
+
+        .calendar__btn {
+            flex: 0 0 20px;
+
+            background: transparent;
+            border: 0;
+            padding: 0;
+
+            cursor: pointer;
+
+            color: #FFF;
+        }
+
+        .calendar__btn:hover {
+            color: #88b1f6;
+        }
+
+        .calendar__btn:focus {
+            color: #88b1f6;
+            outline: none;
+        }
+
+        .calendar__btn-image {
+            width: 100%;
+
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .calendar__btn--next {
+            order: 3;
+        }
+
+        .calendar__btn-image--rotated {
+            transform: rotate(180deg);
+        }
+
+        .calendar__btn--prev {
+            order: 1;
+        }
+
+        .calendar__day-names {
+            margin: 20px 0 0;
+            padding: 0;
+            list-style: none;
+
+            display: flex;
+        }
+
+        .calendar__day-name {
+            flex: 1 0 0;
+            text-align: center;
+
+            font-size: 26px;
+            line-height: 30px;
+            color: #FFFFFF;
+
+            mix-blend-mode: normal;
+            opacity: 0.6;
         }
     </style>
 </head>
 <body>
     <main class="day-view"></main>
-    <aside class="month-view"></aside>
+    <aside class="month-view">
+
+        <div class="calendar">
+            <div class="calendar__header">
+                <div class="calendar__title">
+                    March 2018
+                </div>
+                <button
+                    aria-label="Previous month"
+                    class="calendar__btn calendar__btn--prev">
+                    <svg
+                        role="image"
+                        aria-label=""
+                        class="calendar__btn-image"
+                        viewBox="0 0 20 38">
+                        <path d="M19 1L1 19L19 37" />
+                    </svg>
+                </button>
+                <button
+                    aria-label="Next month"
+                    class="calendar__btn calendar__btn--next">
+                    <svg
+                        role="image"
+                        aria-label=""
+                        class="calendar__btn-image calendar__btn-image--rotated"
+                        viewBox="0 0 20 38">
+                        <path d="M19 1L1 19L19 37" />
+                    </svg>
+                </button>
+            </div>
+            <ol class="calendar__day-names">
+                <li class="calendar__day-name">M</li>
+                <li class="calendar__day-name">T</li>
+                <li class="calendar__day-name">W</li>
+                <li class="calendar__day-name">T</li>
+                <li class="calendar__day-name">F</li>
+                <li class="calendar__day-name">Sat</li>
+                <li class="calendar__day-name">Sun</li>
+            </ol>
+            <ol class="calendar__days">
+            </ol>
+        </div>
+
+    </aside>
 </body>
 </html>

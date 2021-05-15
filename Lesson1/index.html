@@ -110,35 +110,33 @@
     <article class="degustation">
         <form class="degustation__form">
             <h2 class="degustation__title">Запись на дегустацию</h2>
-            <div class="degustation__row">
+            <div class="degustation__row degustation__row--description">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Feugiat enim tortor in hac id imperdiet adipiscing. Pellentesque nisi, mi sit non sit sed fermentum.
             </div>
 
-            <div class="degustation__row">
-                <div>
-                    <label>
-                        Имя:
-                        <input
-                            required
-                            type="text"
-                            name="name"/>
-                    </label>
-                </div>
+            <div class="degustation__row degustation__row--with-two-inputs">
+                <label class="degustation__label">
+                    <input
+                        class="degustation__input degustation__input--filed"
+                        value="Andrey"
+                        required
+                        type="text"
+                        name="name"/>
+                    <span class="degustation__label-title">Имя:</span>
+                </label>
 
-                <div>
-                    <label>
-                        Телефон:
-                        <input
-                            required
-                            type="tel"
-                            name="phone"
-                            placeholder="+380 (ХХ) ХХХ-ХХ-ХХ" />
-                    </label>
-                </div>
+                <label class="degustation__label">
+                    <input
+                        class="degustation__input"
+                        required
+                        type="tel"
+                        name="phone"/>
+                    <span class="degustation__label-title">Телефон:</span>
+                </label>
             </div>
 
-            <div class="degustation__row">
-                <select required name="place">
+            <div class="degustation__row degustation__label">
+                <select class="degustation__input" required name="place">
                     <option value="Новокузнечный переулок 4/1">
                         Новокузнечный переулок 4/1
                     </option>
@@ -151,8 +149,8 @@
                 </select>
             </div>
 
-            <div class="degustation__row">
-                <button type="submit">записаться</button>
+            <div class="degustation__row degustation__row--actions">
+                <button class="degustation__submit" type="submit">записаться</button>
             </div>
         </form>
     </article>
