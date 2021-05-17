@@ -132,6 +132,7 @@ body {
 @media (min-width: 1200px) {
     .main {
         grid-template-columns: repeat(3, 1fr);
+        /* TODO: add gold grail problem resolve */
         grid-template-rows: repeat(2, 1fr);
         grid-template-areas:
             "a b d"
