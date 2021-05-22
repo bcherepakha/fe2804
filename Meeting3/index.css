@@ -1,0 +1,76 @@
+.hamburger {
+    width: 100px;
+
+    /* height: 100px; */
+
+    color: green;
+
+    stroke: currentColor;
+    stroke-width: 1;
+
+    transition: all 2s ease-in 0s;
+    will-change: color;
+}
+
+.hamburger:hover {
+    color: red;
+}
+
+.hamburger--big {
+    width: 200px;
+
+    /* height: 200px; */
+}
+
+.close {
+    width: 100px;
+
+    color: green;
+
+    stroke: currentColor;
+    stroke-width: 1;
+}
+
+.transform-hamburger {
+    width: 100px;
+
+    color: green;
+
+    stroke: currentColor;
+    stroke-width: 1;
+}
+
+.transform-hamburger__line-middle {
+    opacity: 1;
+
+    transition: opacity .2s linear 0s;
+}
+
+.transform-hamburger__line-top {
+    transform-origin: 50% 25%;
+    transform: translateY(0%) rotate(0deg) scaleX(1);
+
+    transition: transform .4s linear .2s;
+}
+
+.transform-hamburger__line-bottom {
+    transform-origin: 50% 75%;
+    transform: translateY(0%) rotate(0deg) scaleX(1);
+
+    transition: transform .4s linear .6s;
+}
+
+.transform-hamburger:hover .transform-hamburger__line-middle,
+.transform-hamburger--transformed .transform-hamburger__line-middle {
+    opacity: 0;
+}
+
+.transform-hamburger:hover .transform-hamburger__line-top,
+.transform-hamburger--transformed .transform-hamburger__line-top {
+    transform: translateY(25%) rotate(45deg) scaleX(1.41);
+}
+
+.transform-hamburger:hover .transform-hamburger__line-bottom,
+.transform-hamburger--transformed .transform-hamburger__line-bottom {
+    transform: translateY(-25%) rotate(-45deg) scaleX(1.41);
+}

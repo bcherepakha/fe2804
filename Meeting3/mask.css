@@ -1,0 +1,29 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background:
+        linear-gradient(#eee 1px, transparent 2px),
+        linear-gradient(to right, #eee 1px, transparent 2px);
+    background-size: 1em 1em;
+}
+
+.wrapper {
+    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.svg,
+.sign {
+    display: block;
+}
+
+.sign {
+    margin: .5em 0;
+    padding: 0 .5em;
+    font-size: 3em;
+}

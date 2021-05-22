@@ -1,0 +1,16 @@
+# Meeting 3
+
+* [Transform Element in Actions](https://codepen.io/bcherepakha/pen/jOrEVNL)
+* [CSS Clip-path maker](https://bennettfeely.com/clippy/)
+* [SVG. Elements](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
+* [SVG-фигуры и трансформации](http://css.yoksel.ru/svg-shapes/)
+* [Размеры в SVG](http://css.yoksel.ru/svg-sizes/)
+* [SVG: заливка и обводка](http://css.yoksel.ru/svg-fill-and-stroke/)
+* [SVG: группировка и переиспользование элементов](http://css.yoksel.ru/svg-groups-use)
+* [SVG-иконки](http://css.yoksel.ru/svg-icons/)
+* [SVG-path](http://css.yoksel.ru/svg-path/)
+* [Возможности оформления SVG](http://css.yoksel.ru/svg-decoration/)
+* [CSS и SVG маски](http://css.yoksel.ru/css-and-svg-masks/)
+* [SVG-маски](http://css.yoksel.ru/svg-masks/)
+* [Анимированные SVG-маски](http://css.yoksel.ru/animated-svg-mask/)
+* [SVG-прелоадеры](http://css.yoksel.ru/svg-preloaders/)

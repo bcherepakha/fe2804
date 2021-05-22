@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG</title>
+    <link rel="stylesheet" href="mask.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <svg width="218" height="300" class="svg">
+
+            <symbol id="image-mask">
+                <g stroke="#333" stroke-width="12">
+                    <rect fill="#fff" x="6" y="6" width="97" height="88" />
+                    <rect fill="#bbb" x="6" y="106" width="97" height="88" />
+                    <rect fill="#777" x="6" y="206" width="97" height="88" />
+                    <rect fill="#ddd" x="115" y="6" width="97" height="88" />
+                    <rect fill="#999" x="115" y="106" width="97" height="88" />
+                    <rect fill="#555" x="115" y="206" width="97" height="88" />
+                </g>
+            </symbol>
+
+            <mask id="mask-base">
+                <use xlink:href="#image-mask" />
+            </mask>
+
+            <symbol id="image-base">
+                <image xlink:href="img/Juletræet.jpg" width="218" height="300" />
+            </symbol>
+
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#image-base"></use>
+
+        </svg>
+
+        <span class="sign">+</span>
+
+        <svg width="218" height="300" class="svg">
+            <rect y="0" width="100%" height="100%" fill="black" />
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#image-mask"></use>
+        </svg>
+
+        <span class="sign">=</span>
+
+        <svg width="218" height="300" class="svg">
+            <g mask="url(#mask-base)">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#image-base"></use>
+            </g>
+        </svg>
+
+    </div>
+
+    <div class="wrapper">
+        <svg width="218" height="300" class="svg">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#image-base"></use>
+        </svg>
+
+        <span class="sign">+</span>
+
+        <svg width="218" height="300" class="svg">
+            <symbol id="image-opacity-mask">
+                <g style="stroke: rgba(255,255,255, .5); fill: #fff" stroke-width="12">
+                    <rect style="opacity: 1;" x="6" y="6" width="97" height="88" />
+                    <rect style="opacity: .8;" x="115" y="6" width="97" height="88" />
+                    <rect style="opacity: .6;" x="6" y="106" width="97" height="88" />
+                    <rect style="opacity: .4;" x="115" y="106" width="97" height="88" />
+                    <rect style="opacity: .2;" x="6" y="206" width="97" height="88" />
+                    <rect style="opacity: .1;" x="115" y="206" width="97" height="88" />
+                </g>
+            </symbol>
+
+            <rect y="0" width="100%" height="100%" fill="black" />
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#image-opacity-mask"></use>
+        </svg>
+
+        <span class="sign">=</span>
+
+        <svg width="218" height="300" class="svg">
+            <mask id="mask-opacity">
+                <use xlink:href="#image-opacity-mask" />
+            </mask>
+
+            <g mask="url(#mask-opacity)">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#image-base"></use>
+            </g>
+        </svg>
+
+    </div>
+
+    <div class="wrapper">
+        <style>
+            .animate-mask-lines {
+                stroke: #FFF;
+                stroke-width: 0;
+                animation: a-mask-lines 5s infinite;
+            }
+
+            @keyframes a-mask-lines {
+                50% {
+                    stroke-width: 142%;
+                }
+            }
+        </style>
+
+        <svg width="218" height="300" class="svg">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#image-base"></use>
+        </svg>
+
+        <span class="sign">+</span>
+
+        <svg width="218" height="300" class="svg">
+            <symbol id="image-line-mask">
+                <g stroke-width="30" stroke="#fff">
+                    <line x1="0" y1="0" x2="100%" y2="100%" class="animate-mask-lines" />
+                    <line x1="0" y1="100%" x2="100%" y2="0%" class="animate-mask-lines" />
+                </g>
+            </symbol>
+
+            <rect y="0" width="100%" height="100%" fill="black" />
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#image-line-mask"></use>
+        </svg>
+
+        <span class="sign">=</span>
+
+        <svg width="218" height="300" class="svg">
+            <mask id="mask-lines">
+                <use xlink:href="#image-line-mask" />
+            </mask>
+
+            <g mask="url(#mask-lines)">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#image-base"></use>
+            </g>
+        </svg>
+
+    </div>
+
+    <div class="wrapper">
+        <style>
+            .animate-mask-grid {
+                stroke: #FFF;
+                stroke-width: 0;
+                animation: a-mask-grid 5s infinite;
+            }
+
+            @keyframes a-mask-grid {
+                50% {
+                    stroke-width: 70;
+                }
+            }
+        </style>
+
+        <svg width="218" height="300" class="svg">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#image-base"></use>
+        </svg>
+
+        <span class="sign">+</span>
+
+        <svg width="218" height="300" class="svg">
+            <pattern id="pattern-mask-dots" width="50" height="50" viewBox="0 0 50 50" patternUnits="userSpaceOnUse">
+                <g stroke-width="4" stroke="#ddd">
+                    <line x1="0" y1="25" x2="100%" y2="25" class="animate-mask-grid" />
+                    <line x1="25" y1="0%" x2="25" y2="100%" class="animate-mask-grid" />
+                </g>
+            </pattern>
+
+            <rect y="0" width="100%" height="100%" fill="black" />
+            <rect y="0" width="100%" height="100%" fill="url(#pattern-mask-dots)" />
+        </svg>
+
+        <span class="sign">=</span>
+
+        <svg width="218" height="300" class="svg">
+            <mask id="mask-grid">
+                <rect y="0" width="100%" height="100%" fill="url(#pattern-mask-dots)" />
+            </mask>
+
+            <g mask="url(#mask-grid)">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#image-base"></use>
+            </g>
+        </svg>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+body {
+    perspective: 1500px;
+    perspective-origin: center center;
+}
+
+.slider {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+
+    position: relative;
+}
+
+.slider--rotation {
+    transform-style: preserve-3d;
+}
+
+.slider-body {
+    width: 100%;
+    max-width: 600px;
+    height: 400px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: relative;
+}
+
+.slider__item {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: center center no-repeat;
+    background-size: cover;
+
+    opacity: 0;
+    animation: hide 8s step-end infinite;
+}
+
+.slider__item:nth-child(1) {
+    background-image: url(img/slide1.webp);
+}
+
+.slider__item:nth-child(2) {
+    background-image: url(img/slide2.webp);
+    animation-delay: 2s;
+}
+
+.slider__item:nth-child(3) {
+    background-image: url(img/slide3.webp);
+    animation-delay: 4s;
+}
+
+.slider__item:nth-child(4) {
+    background-image: url(img/slide4.webp);
+    animation-delay: 6s;
+}
+
+.slider-body--rotation-layers .slider__item:nth-child(1) {
+    transform-origin: center bottom;
+    transform: rotateX(75deg) translateZ(50px);
+}
+
+.slider-body--rotation-layers .slider__item:nth-child(2) {
+    transform-origin: center bottom;
+    transform: rotateX(75deg) translateZ(150px);
+}
+
+.slider-body--rotation-layers .slider__item:nth-child(3) {
+    transform-origin: center bottom;
+    transform: rotateX(75deg) translateZ(250px);
+}
+
+.slider-body--rotation-layers .slider__item:nth-child(4) {
+    transform-origin: center bottom;
+    transform: rotateX(75deg) translateZ(350px);
+}
+
+/* slider animation */
+.slider--rotation .slider__item {
+    opacity: .3;
+    animation: partial-hide 8s step-end infinite;
+}
+
+@keyframes hide {
+0% {
+    opacity: 1;
+}
+
+25% {
+    opacity: 0;
+}
+}
+
+@keyframes partial-hide {
+0% {
+    opacity: 1;
+}
+
+25% {
+    opacity: .3;
+}
+}
+
+/* progress */
+.progress {
+    width: 0;
+    height: 5px;
+    margin-top: 3px;
+    background: rgba(154, 205, 50, .5);
+    animation: timer 8s infinite linear;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+@keyframes timer {
+100% {
+    width: 100%;
+}
+}
+
+/* add mask */
+.slider--with-mask .slider__item {
+    mask: url('#mask-grid');
+}
