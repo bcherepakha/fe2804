@@ -13,103 +13,95 @@
     10. Сравните свойства этих двух обьектов и придумайте структуру данных для отображения их разницы.
 */
 
-const groupKey = 'group';
-
+const ageKey = 'age';
 const user = {
-    name: 'Alexander',
-    // group: 'fe2402',
-    [groupKey]: 'fe2402'
+    name: {
+        first: 'Alexander',
+        family: 'Pugachov'
+    },
+    'working group': 'fe2402',
+    [ageKey]: 23, // age: 23
+    8: 12
 };
 
-console.log( user['name'] );
-console.log( user[groupKey] );
-console.log( user.groupKey );
+console.log( user );
+console.log( user.age );
+console.log( user.name );
+console.log( user.name.family );
+console.log( user['working group'] );
+console.log( user['age'] );
+console.log( user['name']['family'] );
+console.log( user.ageKey ); // undefined
+console.log( user[ageKey] );
+console.log( user[8] );
 
-user['name'] = 'Ilya';
+user['working group'] = 'fe2804';
 
-console.log( user['name'] );
+console.log( user['working group'] );
 
-user[groupKey] = 'fe0224';
+delete user.name;
 
-console.log( user.group );
+console.log( user );
 
-user.name = 'Darina';
+delete user[8];
 
-console.log( user['name'] );
+console.log( user );
 
-user.groupKey = 'groupKey';
-
-console.log( user.groupKey );
-console.log( user[groupKey] );
-
-delete user.groupKey;
-delete user[groupKey];
-
-console.log( user.groupKey );
-console.log( 'groupKey' in user );
-console.log( 'name' in user );
-console.log( groupKey in user );
-
-user.group = 'fe2402';
-
-const user1 = {
-    name: 'Vitalik',
-    // group: user.group
+const a = {
+    value1: 8, // '7'
+    value2: 10 // 12
 };
 
-user1.group = user.group;
+console.log( a.value1 + a.value2 ); // 18
 
-console.log( user );
-console.log( user1 ); // [object Object]
+const b = a;
 
-const cloneUser = clone(user);
+b.value2 = 12;
 
-console.log( cloneUser );
+console.log( b.value1 + b.value2 ); // 20
 
-cloneUser.name = 'Anatoliy';
+b.value1 = '7';
 
-console.log( cloneUser );
-console.log( user );
+console.log( a.value1 + a.value2 ); // '712'
+// typescript
 
-function clone(obj) {
+for (const key in user) {
+    console.log( key, user[key] );
+}
+
+function getObjLength(obj) {
+    let count = 0;
+
+    for (const key in obj) {
+        count++; // count = count + 1
+    }
+
+    return count;
+}
+
+console.log( getObjLength(user) );
+
+function cloneObj(obj) {
     const result = {};
 
     for (const key in obj) {
-        result[key] = obj[key];
+        let value = obj[key];
+
+        if (typeof value === 'object') {
+            value = cloneObj(value);
+        }
+
+        result[key] = value;
     }
 
     return result;
 }
 
-function objLength(obj) {
-    let counter = 0;
+const c = { name: 'c', a };
+const d = cloneObj(c);
+d.name = 'd';
+d.a.value1 = 9;
 
-    for (const key in obj) {
-        counter++;
-    }
-
-    return counter;
-}
-
-console.log( objLength(user) );
-console.log( objLength({}) );
-
-function isEmpty(obj) {
-    // return objLength(obj) === 0;
-
-    for (const key in obj) {
-        return false;
-    }
-
-    return true;
-}
-
-console.log( isEmpty(user) );
-console.log( isEmpty({}) );
-
-const osArr = ['apple', 'windows', 'linux'];
-
-console.log( osArr[0] );
-console.log( osArr[1] );
-console.log( osArr[2] );
-console.log( osArr.length );
+console.log( d );
+console.log( c );
+console.log( a );
