@@ -1,12 +1,21 @@
 .cross__board {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
 
     max-width: 600px;
     width: 100%;
     border: 1px solid black;
 
     margin: 0 auto;
+
+    box-sizing: border-box;
+}
+
+.cross__board--row {
+    display: flex;
+    flex-direction: row;
+
+    width: 100%;
 
     box-sizing: border-box;
 }
