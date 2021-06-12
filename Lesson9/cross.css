@@ -1,4 +1,6 @@
 .cross__board {
+    position: relative;
+
     display: flex;
     flex-direction: column;
 
@@ -87,4 +89,75 @@
 .cross__board-item:hover {
     background-color: rgba(155, 224, 250, 0.16);
     cursor: pointer;
+}
+
+.cross__finish-line {
+    position: absolute;
+    width: 100%;
+    height: 15px;
+
+    stroke: #000;
+    stroke-width: 15px;
+    stroke-linecap: round;
+
+    transform-origin: 0 0;
+    transform: translateY(-50%);
+}
+
+.cross__finish-line--row.cross__finish-line--0 {
+    top: 16.67%;
+    left: 0;
+}
+
+.cross__finish-line--row.cross__finish-line--1 {
+    top: 50%;
+    left: 0;
+}
+
+.cross__finish-line--row.cross__finish-line--2 {
+    top: 83.33%;
+    left: 0;
+}
+
+.cross__finish-line--column {
+    transform: rotate(90deg) translateY(-50%);
+}
+
+.cross__finish-line--column.cross__finish-line--0 {
+    left: 16.67%;
+    top: 0;
+}
+
+.cross__finish-line--column.cross__finish-line--1 {
+    left: 50%;
+    top: 0;
+}
+
+.cross__finish-line--column.cross__finish-line--2 {
+    left: 83.33%;
+    top: 0;
+}
+
+.cross__finish-line--diagonal.cross__finish-line--0 {
+    transform: rotate(45deg) translateY(-50%) scaleX(1.4);
+}
+
+.cross__finish-line--diagonal.cross__finish-line--1 {
+    transform-origin: 100% 0;
+    transform: rotate(-45deg) translateY(-50%) scaleX(1.4);
+}
+
+.cross__finish-line {
+    stroke-dasharray: 134%;
+
+    animation: finish-line 2s linear 2s 1 normal backwards;
+}
+
+@keyframes finish-line {
+    from {
+        stroke-dashoffset: 134%;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
 }

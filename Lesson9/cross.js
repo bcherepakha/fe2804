@@ -2,24 +2,27 @@ function CrossGame(user) {
     // this = {}
 
     const svgNS = 'http://www.w3.org/2000/svg';
-    const X = 1;
-    const O = 0;
-    const EMPTY = -1;
+    const X = CrossGame.X;
+    const O = CrossGame.O;
+    const EMPTY = 'EMPTY';
 
-    const NOT_STARTED = 0;
-    const STARTED = 1;
-    const WIN = 3;
-    const STANDOFF = 4;
+    const NOT_STARTED = 'NOT_STARTED';
+    const STARTED = 'STARTED';
+    const WIN = 'WIN';
+    const STANDOFF = 'STANDOFF';
 
     this.user = user;
     this.steps = 0;
     this.status = NOT_STARTED;
+    this.boardEl = document.querySelector('.cross__board');
     this.boardRows = document.querySelectorAll('.cross__board--row');
     this.board = [
         [EMPTY, EMPTY, EMPTY],
         [EMPTY, EMPTY, EMPTY],
         [EMPTY, EMPTY, EMPTY]
     ];
+    this.stepHistory = [];
+    this.winLine = null;
 
     this.init = function init() {
         // this = game
@@ -96,6 +99,28 @@ function CrossGame(user) {
                 }
             }
         }
+
+
+        if (this.status === WIN && this.winLine) {
+            this.addCrossLine(this.winLine);
+        }
+    };
+
+    this.addCrossLine = function (winLine) {
+        const { type, index } = winLine;
+        const svg = document.createElementNS(svgNS, 'svg');
+
+        svg.setAttribute('class', [
+            'cross__finish-line',
+            `cross__finish-line--${type}`,
+            `cross__finish-line--${index}`
+        ].join(' '));
+
+        svg.innerHTML = `
+            <line x1="3%" y1="50%" x2="97%" y2="50%"/>
+        `;
+
+        this.boardEl.append(svg);
     };
 
     this.step = function step(row, column) {
@@ -108,6 +133,7 @@ function CrossGame(user) {
             const el = this.steps % 2 === 0 ? X : O;
 
             this.board[row][column] = el;
+            this.stepHistory.push({ el, column, row });
 
             const win = this.isWin();
 
@@ -117,9 +143,9 @@ function CrossGame(user) {
                 if (this.steps === 9) {
                     this.status = STANDOFF;
                 }
-
             } else {
                 this.status = WIN;
+                this.winLine = win;
             }
 
             this.render();
@@ -133,59 +159,17 @@ function CrossGame(user) {
 
     this.isWin = function isWin() {
         const currentSymbol = this.steps % 2 === 0 ? X : O;
+        const lines = this.getLines();
+        const winLine = lines.find(isLineWin);
 
-        function isRowWin(symbol) {
-            return symbol === currentSymbol;
+        function isLineWin(line) {
+            return line.data.every(function(symbol) {
+                return symbol === currentSymbol;
+            });
         }
 
-        for (let i=0; i < 3; i++) {
-            const columnArr = [
-                this.board[0][i],
-                this.board[1][i],
-                this.board[2][i]
-            ];
-
-            const winColumn = columnArr.every(isRowWin);
-
-            if (winColumn) {
-                return {
-                    index: i,
-                    type: 'column'
-                };
-            }
-
-            const rowArr = this.board[i];
-
-            const winRow = rowArr.every(isRowWin);
-
-            if (winRow) {
-                return {
-                    index: i,
-                    type: 'row'
-                };
-            }
-        }
-
-        const diagonals = [
-            [
-                this.board[0][0],
-                this.board[1][1],
-                this.board[2][2]
-            ],
-            [
-                this.board[0][2],
-                this.board[1][1],
-                this.board[2][0]
-            ]
-        ];
-
-        const winDiagIdx = diagonals.findIndex(isRowWin);
-
-        if (winDiagIdx !== -1) {
-            return {
-                index: winDiagIdx,
-                type: 'diagonal'
-            };
+        if (winLine) {
+            return winLine;
         }
 
         return null;
@@ -194,6 +178,8 @@ function CrossGame(user) {
     this.startGame = function startGame() {
         this.status = STARTED;
         this.steps = 0;
+        this.stepHistory = [];
+        this.winLine = null;
 
         if (this.user !== X) {
             this.autoMove();
@@ -253,7 +239,7 @@ function CrossGame(user) {
             ? -1
             : lineArr.filter(function (el) {
                 return sm === el;
-              }).length;
+            }).length;
 
         // return lineArr.reduce(
         //     function (sum, el) {
@@ -265,6 +251,28 @@ function CrossGame(user) {
         //     },
         //     0
         // );
+    };
+
+    this.getDistanceBetweenCells = function ( cell1, cell2 ) {
+        return Math.pow(Math.abs(cell1.column - cell2.column), 2)
+            + Math.pow(Math.abs(cell1.row - cell2.row), 2);
+    };
+
+    this.getEmtyCorners = function() {
+        //* this = game
+        const checkHandler = function (cell) {
+            //* this = game
+            return this.board[cell.row][cell.column] === EMPTY;
+        };
+
+        //* this = game
+        return [
+            { column: 0, row: 0},
+            { column: 2, row: 0},
+            { column: 0, row: 2},
+            { column: 2, row: 2},
+        ].filter(checkHandler, this);
+        // .filter(checkHandler.bind(this));
     };
 
     this.autoMove = function() {
@@ -324,6 +332,45 @@ function CrossGame(user) {
             }
         }
 
+        //* this = game
+        if (mySm === X) {
+            const lastMove = this.stepHistory[this.stepHistory.length - 1];
+            const getDistanceToCell = this.getDistanceBetweenCells.bind(this, lastMove);
+            const compareFunction = function (cell1, cell2) {
+                //* this = undefined
+                const distanceToCell1 = getDistanceToCell(cell1);
+                const distanceToCell2 = getDistanceToCell(cell2);
+
+                // cell1.distance = distanceToCell1;
+                // cell2.distance = distanceToCell2;
+
+                // if (distanceToCell1 > distanceToCell2) {
+                //     return -1;
+                // }
+
+                // if (distanceToCell2 > distanceToCell1) {
+                //     return 1;
+                // }
+
+                return distanceToCell2 - distanceToCell1;
+            };
+            const emptyCorners = this.getEmtyCorners()
+                .sort(compareFunction)
+                .filter(function (corner, idx, corners) {
+                    return getDistanceToCell(corner) === getDistanceToCell(corners[0]);
+                });
+                // .sort(compareFunction.bind(this));
+            const randomCorner = emptyCorners[Math.floor( Math.random() * emptyCorners.length )];
+
+            if (randomCorner) {
+                return this.step(randomCorner.row, randomCorner.column);
+            }
+
+            return this.randomMove();
+        } else {
+            // за нолики дома
+        }
+
         return this.randomMove();
     };
 
@@ -353,7 +400,11 @@ function CrossGame(user) {
     // return this;
 }
 
-const game = new CrossGame(0);
+CrossGame.X = 'X';
+CrossGame.O = 'O';
+
+
+const game = new CrossGame( CrossGame.O );
 
 console.log( game );
 game.init(); // this = game
