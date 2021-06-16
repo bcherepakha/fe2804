@@ -25,6 +25,8 @@
     top: 50%;
     left: 0;
 
+    z-index: 2;
+
     transform: translateY (-50%);
 }
 
@@ -34,6 +36,8 @@
 }
 
 .slider__timeline {
+    --animationDuration: 3s;
+
     position: absolute;
     bottom: 0;
     left: 0;
@@ -48,7 +52,7 @@
 }
 
 .slider__timeline.animated {
-    animation: timeGrow 3s linear 0s infinite;
+    animation: timeGrow var(--animationDuration) linear 0s infinite;
 }
 
 @keyframes timeGrow {
@@ -82,10 +86,12 @@
 .fade .slider__slide {
     opacity: 0;
     transition: opacity .8s ease-in-out 0s;
+    z-index: 0;
 }
 
 .fade .slider__current {
     opacity: 1;
+    z-index: 1;
 }
 
 .slide .slider__body{
@@ -111,4 +117,24 @@
     position: absolute;
     top: 0;
     left: 0;
+}
+
+.slider__run {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+
+    transform: translateX(-100%) translateX(-5px);
+
+    z-index: 3;
+}
+
+.slider__stop {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+
+    transform: translateX(5px);
+
+    z-index: 3;
 }

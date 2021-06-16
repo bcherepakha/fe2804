@@ -3,8 +3,12 @@ const animal = {
         eat: 100,
         drink: 100
     },
-    eat() {},
-    drink() {},
+    eat() { this.state.eat = 100; },
+    drink() { this.state.drink = 100; },
+    step() {
+        this.state.eat = this.state.eat - 1;
+        this.state.drink = this.state.drink - 2;
+    }
 };
 
 const rabbit = {
@@ -15,5 +19,5 @@ const rabbit = {
     __proto__: animal
 };
 
-rabbit.eat();
+rabbit.eat(); //* this = rabbit
 rabbit.state.eat;

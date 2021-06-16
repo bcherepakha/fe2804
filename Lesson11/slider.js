@@ -1,11 +1,13 @@
-function Slider(selector, loop = true, effect) {
+function Slider({ selector, loop = true, autorun = 0, animated = false, effect }) {
     // this = {}
     // this.__proto__ = Slider.prototype
 
     this.props = {
         selector,
         loop,
-        effect
+        effect,
+        autorun,
+        animated
     };
 
     this.state = {
@@ -28,9 +30,12 @@ function Slider(selector, loop = true, effect) {
     }
 
     this.bodyEl = this.rootEl.querySelector('.slider__body');
+    this.stopOnClick = this.stopOnClick.bind(this);
     this.slideCollection = this.bodyEl.querySelectorAll('.slider__slide');
     this.prevBtn = this.rootEl.querySelector('.slider__prev');
     this.nextBtn = this.rootEl.querySelector('.slider__next');
+    this.runBtn = this.rootEl.querySelector('.slider__run');
+    this.stopBtn = this.rootEl.querySelector('.slider__stop');
     this.timelineEl = this.rootEl.querySelector('.slider__timeline');
 
     if (this.prevBtn) {
@@ -47,6 +52,36 @@ function Slider(selector, loop = true, effect) {
 
     if (this.props.effect) {
         this.render = this[`render${this.props.effect[0].toUpperCase()}${this.props.effect.slice(1)}`];
+    }
+
+    if (this.timelineEl && this.props.animated) {
+        this.timelineEl.classList.add('animated');
+
+        if (this.props.autorun) {
+            // this.timelineEl.style.animationDuration = `${this.props.autorun}s`;
+            this.timelineEl.style.setProperty('--animationDuration', `${this.props.autorun}s`);
+        }
+
+        this.timelineEl.addEventListener('animationiteration', this.nextSlide.bind(this));
+
+        if (this.runBtn) {
+            this.runBtn.addEventListener('click', this.startAnimation.bind(this));
+            this.stopBtn.addEventListener('click', this.pauseAnimation.bind(this));
+        }
+    } else if (this.props.autorun > 0 && !this.props.animated) {
+        //* each this.props.autorun sec do this.nextSlide();
+        // setTimeout(calback, time);
+        setTimeout(() => this.run(), this.props.autorun * 1000);
+
+        if (this.runBtn) {
+            this.runBtn.addEventListener('click', this.run.bind(this));
+            this.stopBtn.addEventListener('click', this.stop.bind(this));
+        } else {
+            this.bodyEl.addEventListener('click', this.stopOnClick);
+        }
+    } else {
+        this.runBtn.hidden = true;
+        this.stopBtn.hidden = true;
     }
 
     // return this;
@@ -73,6 +108,11 @@ Slider.prototype.renderSlide = function() {
 
     this.bodyEl.style.transform = `translateX(${-currentSlide * 100}%)`;
 };
+Slider.prototype.stopAnimationIfLastSlide = function() {
+    if (this.props.animated && !this.props.loop && this.state.currentSlide === this.slideCollection.length - 1) {
+        this.pauseAnimation();
+    }
+};
 Slider.prototype.nextSlide = function() {
     this.showSlide(this.state.currentSlide + 1);
 };
@@ -87,7 +127,7 @@ Slider.prototype.showSlide = function(slideIdx) {
         slideIdx = slideIdx % slideCount;
 
         if (slideIdx < 0) {
-            slideIdx = slideCount - slideIdx;
+            slideIdx = slideCount + slideIdx;
         }
     } else {
         slideIdx = Math.max(0, Math.min(slideCount - 1, slideIdx));
@@ -98,16 +138,52 @@ Slider.prototype.showSlide = function(slideIdx) {
     };
 
     this.render();
+    this.stopAnimationIfLastSlide();
+};
+Slider.prototype.run = function() {
+    this.nextSlide();
+    this._intervalID = setInterval(this.nextSlide.bind(this), this.props.autorun * 1000);
+};
+Slider.prototype.stopOnClick = function () {
+    if (this._intervalID) {
+        this.stop();
+    } else {
+        this.nextSlide();
+        this.run();
+    }
+};
+Slider.prototype.stop = function() {
+    if (this._intervalID) {
+        clearInterval(this._intervalID);
+        delete this._intervalID;
+        // this.bodyEl.removeEventListener('click', this.stopOnClick);
+    }
+};
+Slider.prototype.startAnimation = function() {
+    this.timelineEl.style.animationPlayState = 'running';
+};
+Slider.prototype.pauseAnimation = function() {
+    this.timelineEl.style.animationPlayState = 'paused';
 };
 
-const fadeSlider = new Slider('.slider.fade', true, 'fode');
+const fadeSlider = new Slider({
+    selector: '.slider.fade',
+    loop: true,
+    autorun: 5,
+    animated: true,
+    effect: 'fade'
+});
 
 console.log( fadeSlider );
 
 fadeSlider.showSlide(8); //* this = fadeSlider
 
-const slideSlider = new Slider('.slider.slide', false);
+const slideSlider = new Slider({
+    selector: '.slider.slide',
+    loop: false,
+    animated: true,
+});
 
 console.log( slideSlider );
 
-slideSlider.showSlide(9); //* this = slideSlider
+// slideSlider.showSlide(9); //* this = slideSlider
