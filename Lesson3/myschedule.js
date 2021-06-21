@@ -8,7 +8,7 @@ function createEvent( dateObj, duration, text, category ) {
 }
 
 // eslint-disable-next-line no-unused-vars
-const MY_SCHEDULE = {
+export const MY_SCHEDULE = {
     '2021-06-09': [
         createEvent(
             new Date(2021, 5, 9, 9, 0, 0, 0),
@@ -20,7 +20,7 @@ const MY_SCHEDULE = {
             new Date(2021, 5, 9, 11, 0, 0, 0),
             120,
             'Studio workshop',
-            'managment'
+            'management'
         ),
         createEvent(
             new Date(2021, 5, 9, 17, 30, 0, 0),

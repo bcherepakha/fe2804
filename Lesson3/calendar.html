@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar</title>
     <script src="calendar.js" defer></script>
-    <script src="schedule.js" defer></script>
-    <script src="myschedule.js" defer></script>
-    <script src="app.js" defer></script>
+    <script src="schedule.js" type="module"></script>
+    <script src="myschedule.js" type="module"></script>
+    <script src="app.js" type="module"></script>
     <style>
         body {
             margin: 0;
@@ -19,6 +19,27 @@
 
         .day-view {
             flex: 1535 0 0;
+
+            box-sizing: border-box;
+            padding: 80px 130px;
+        }
+
+        .day-view__header {
+            border-bottom: 1px solid #F3F3F3;
+            padding: 0 0 88px;
+        }
+
+        .day-view__title {
+            margin: 0;
+
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 500;
+
+            font-size: 36px;
+            line-height: 42px;
+
+            color: #243D6F;
         }
 
         .month-view {
@@ -213,17 +234,102 @@
         .calendar__day--displayed a::after {
             background: #3cf3f9;
         }
+
+        .day-view__body {
+            margin: 100px 0 0;
+            padding: 0;
+            list-style: none;
+
+            --hourHeight: 124px;
+            --timeSpace: 135px;
+        }
+
+        .day-view__item {
+            border-top: 1px solid #F3F3F3;
+            min-height: var(--hourHeight);
+
+            margin-left: var(--timeSpace);
+
+            position: relative;
+        }
+
+        .day-view__time {
+            position: absolute;
+            top: 0;
+            left: calc(-1*var(--timeSpace));
+
+            transform: translateY(-50%);
+
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 26px;
+            line-height: 30px;
+
+            color: #A4B0C3;
+        }
+
+        .day-view__event {
+            position: absolute;
+            top: 0;
+            left: var(--timeSpace);
+            right: 0;
+
+            z-index: 1;
+
+            /* width: 100%; */
+
+            border-left: 6px solid var(--event-category-color);
+            background: var(--event-category-background);
+
+            padding: 0 61px 0 74px;
+
+            box-sizing: border-box;
+
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 28px;
+            line-height: 33px;
+
+            color: #243D6F;
+
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+
+            --event-category-color: rgba(255, 70, 126, 1);
+            --event-category-background: rgba(255, 70, 126, 0.15);
+        }
+
+        .day-view__event--finance {
+            --event-category-color: #8576ED;
+            --event-category-background: rgba(133, 118, 237, 0.15);
+        }
+
+        .day-view__event--management {
+            --event-category-color: rgb(243, 153, 70);
+            --event-category-background: rgba(243, 153, 70, 0.15);
+        }
+
+        .day-view__body {
+            position: relative;
+        }
     </style>
 </head>
 <body>
     <main class="day-view">
-        <div></div>
-        <ul>
-            <li>
-                <div>09:00</div>
-                <div></div>
-            </li>
-        </ul>
+        <div class="day-view__header">
+            <h1 class="day-view__title"></h1>
+        </div>
+        <div class="day-view__body">
+            <div class="day-view__item">
+                <div class="day-view__time">09:00</div>
+                <div class="day-view__event day-view__event--finance">
+                    text
+                </div>
+            </div>
+        </div>
     </main>
     <aside class="month-view">
 
