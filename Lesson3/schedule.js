@@ -1,18 +1,42 @@
 import {MY_SCHEDULE} from './myschedule.js';
 
+function delay(fn, CALL_FREQUENCY = 300) {
+    //* LE = { lastCallTime, function }
+    let lastCallTime = 0;
+
+    return function (...args) {
+        const currentTime = Date.now();
+
+        if (currentTime - lastCallTime > CALL_FREQUENCY) {
+            //* execute
+            lastCallTime = currentTime;
+
+            return fn.apply(this, args);
+        }
+    };
+}
+
 export class Schedule {
     constructor(day) {
         const currentDate = new Date(day);
 
+        currentDate.setHours(9);
+        currentDate.setMinutes(0);
+        currentDate.setSeconds(0);
+        currentDate.setMilliseconds(0);
+
         this.state = {
             day,
             currentDate,
+            draggedEvent: null
         };
 
         this.titleEl = document.querySelector('.day-view__title');
         this.bodyEl = document.querySelector('.day-view__body');
         this.hourHeight = 124;
 
+        //* NOTE: prevent dragover default to allow drop
+        this.bodyEl.addEventListener('dragover', this.preventDefault, false);
         this.bodyEl.addEventListener('drop', this.dropHandler.bind(this), false);
 
         this.render();
@@ -63,6 +87,9 @@ export class Schedule {
     createHour(hh) {
         const rootEl = document.createElement('div');
         const timeEl = document.createElement('div');
+        const startDate = new Date(this.state.currentDate);
+
+        startDate.setHours(hh);
 
         rootEl.className = 'day-view__item';
         timeEl.className = 'day-view__time';
@@ -70,9 +97,23 @@ export class Schedule {
 
         rootEl.append(timeEl);
 
-        // rootEl. = true;
+        // rootEl.addEventListener('dragenter', this.dragEnterHour.bind(this), false);
+        // rootEl.addEventListener('dragleave', this.dragLeaveHour.bind(this), false);
+        rootEl.addEventListener('dragover', this.dragOver.bind(this, 'hour', rootEl, startDate, 60));
 
         return rootEl;
+    }
+
+    dragEnterHour(e) {
+        e.currentTarget.classList.add('day-view__item--drag-over');
+    }
+
+    dragLeaveHour(e) {
+        e.currentTarget.classList.remove('day-view__item--drag-over');
+    }
+
+    preventDefault(event) {
+        event.preventDefault();
     }
 
     renderEvent(event) {
@@ -101,17 +142,25 @@ export class Schedule {
 
         eventEl.draggable = true;
 
-        eventEl.addEventListener('dragstart', this.dragStartEvent.bind(this, event), false);
-        eventEl.addEventListener('dragend', this.dragEndEvent.bind(this, event), false);
+        eventEl.addEventListener('dragstart', this.dragStartEvent.bind(this, event, eventEl), false);
+        eventEl.addEventListener('dragend', this.dragEndEvent.bind(this, event, eventEl), false);
+        eventEl.addEventListener('dragover', this.dragOver.bind(this, 'event', eventEl, startDate, event.duration));
 
         return eventEl;
     }
 
-    dragStartEvent(event) {
-        console.log('dragStartEvent', event );
+    dragStartEvent(event, eventEl, e) {
+        e.dataTransfer.setDragImage(eventEl, 0, 0);
+        this.state.draggedEvent = event;
+        this.state.draggedEventEL = eventEl;
+
+        this.newTimeEl = document.createElement('div');
+        this.newTimeEl.className = 'day-view__time day-view__time--new-time';
+
+        this.bodyEl.append(this.newTimeEl);
     }
 
-    dragEndEvent(event, e) {
+    dragEndEvent(event, eventEl, e) {
         console.log('dragEndEvent', event );
         e.preventDefault();
         e.stopPropagation();
@@ -122,7 +171,50 @@ export class Schedule {
         e.preventDefault();
         e.stopPropagation();
 
-        console.log('dropHandler');
+        this.newTimeEl.remove();
+        this.newTimeEl = null;
+
+        if (this.state.currentHourEl) {
+            this.state.currentHourEl.classList.remove('day-view__item--drag-over');
+            this.state.currentHourEl = null;
+        }
+
+        if (this.state.newTime) {
+            this.state.draggedEvent.startDate = this.state.newTime.toJSON();
+
+            this.state.draggedEvent = null;
+            this.state.draggedEventEL = null;
+
+            this.render();
+        }
+    }
+
+    dragOver(type, el, startDate, duration, e) {
+        e.preventDefault();
+
+        const { clientY } = e;
+        const { top, height } = el.getBoundingClientRect();
+        const elementTop = clientY - top;
+        const shiftTime = elementTop * duration / height;
+        const newTime = new Date(startDate);
+
+        newTime.setMinutes( newTime.getMinutes() + shiftTime );
+
+        const hh = newTime.getHours().toString().padStart(2, '0');
+        const mm = newTime.getMinutes().toString().padStart(2, '0');
+        const { top: bodyTop } = this.bodyEl.getBoundingClientRect();
+        const currentHourEl = this.hoursCollection[newTime.getHours()];
+
+        this.newTimeEl.innerText = `${hh}:${mm}`;
+        this.newTimeEl.style.top = `${clientY - bodyTop}px`;
+        this.state.newTime = newTime;
+
+        if (this.state.currentHourEl && this.state.currentHourEl !== currentHourEl) {
+            this.state.currentHourEl.classList.remove('day-view__item--drag-over');
+        }
+
+        this.state.currentHourEl = currentHourEl;
+        this.state.currentHourEl.classList.add('day-view__item--drag-over');
     }
 
     renderEvents(events) {
@@ -133,14 +225,17 @@ export class Schedule {
         const elements = [];
         const events = this.getCurrentSchedule();
 
+        this.hoursCollection = {};
+
         if (events) {
             events.forEach(e => elements.push(this.renderEvent(e)));
         }
 
         for (let hh=9; hh <= 20; hh++) {
-            elements.push(
-                this.createHour(hh)
-            );
+            const hourElement = this.createHour(hh);
+
+            this.hoursCollection[hh] = hourElement;
+            elements.push(hourElement);
         }
 
         this.bodyEl.innerText = '';
