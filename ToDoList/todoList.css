@@ -546,3 +546,19 @@ html .clear-completed:active {
 	background: #df7578;
 	color: #fff;
 }
+
+.edit:valid {
+	border-color: green;
+}
+
+.edit.error,
+.edit:invalid {
+	border-color: red;
+}
+
+.errorText {
+    margin: 0.4em;
+    margin-left: 43px;
+    color: red;
+    font-size: .8em;
+}
