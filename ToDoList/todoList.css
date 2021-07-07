@@ -562,3 +562,11 @@ html .clear-completed:active {
     color: red;
     font-size: .8em;
 }
+
+.pagination {
+	margin: 10px;
+}
+
+.pagination a {
+	margin: 0 .6em;
+}

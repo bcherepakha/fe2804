@@ -3,25 +3,39 @@ import AddTaskForm from './addTaskForm.js';
 import Task from './task.js';
 import Filter from './filter.js';
 import TasksAPI from './tasksAPI.js';
+import Pagination from './pagination.js';
 
 const notifications = new Notifications();
 const addTask = new AddTaskForm();
 const filter = new Filter( onFilterChange );
 const api = new TasksAPI();
+const pagination = new Pagination(document.querySelector('.pagination'));
 const todoListEl = document.querySelector('.todo-list');
 let tasks = [];
 
 addTask.addEventListener('complete', onCompleteAllStatusChange);
 addTask.addEventListener('addTask', onAddTask);
 
+console.log( pagination );
+
+pagination.render();
+
 // addLocalTasks(readTasks());
-api.getTasks()
-    .then(tasksObj => {
-        addLocalTasks(tasksObj);
-    })
-    .catch(() => {
-        notifications.addNote('Server error', 'error');
-    });
+
+getTaskFromServer();
+
+function getTaskFromServer() {
+    return api.getTasks({
+            page: pagination.page,
+            limit: pagination.limit
+        })
+        .then(tasksObj => {
+            addLocalTasks(tasksObj);
+        })
+        .catch(() => {
+            notifications.addNote('Server error', 'error');
+        });
+}
 
 function onCompleteAllStatusChange() {
     console.log( addTask.getCompleteStatus() );
@@ -51,7 +65,7 @@ function addTaskToStore(taskData) {
     tasks.push(task);
 }
 
-function onAddTask(status, taskData) {
+async function onAddTask(status, taskData) {
     if (status === 'error') {
         notifications.addNote('please use more than 3 symbols in task text', 'error')
             .removeAfter(3000);
@@ -61,31 +75,39 @@ function onAddTask(status, taskData) {
         || typeof taskData.completed !== 'boolean') {
         console.log('wrong data');
     } else if (status === 'success' || status === 'render') {
-        addTaskToStore(taskData);
+        try {
+            const serverTaskData  = await api.addTask(taskData);
 
-        if (status === 'success') {
-            saveTasks();
+            addTaskToStore(serverTaskData);
+            renderTasks(tasks);
+        } catch (error) {
+            notifications.addNote('server error', 'error');
         }
-
-        renderTasks(tasks);
-        // renderTask(task);
     }
 }
 
-function onTaskChange() {
-    saveTasks();
+async function onTaskChange(task) {
+    try {
+        const newData = await api.changeTask(task.data);
 
-    renderTasks(tasks);
-
-    // if (isTaskShown(task) === false) {
-    // task.render().remove();
-    // }
+        tasks = [];
+        await getTaskFromServer();
+    } catch(error) {
+        console.log(error);
+    }
+    // renderTasks(tasks);
 }
 
 function onTaskDestroy(task) {
-    tasks = tasks.filter(t => t !== task);
-
-    saveTasks();
+    api.deleteTask(task.data.id)
+        .then(function onSuccess() {
+            tasks = tasks.filter(t => t !== task);
+            renderTasks(tasks);
+        })
+        .catch(function onError(error) {
+            notifications.addNote(error, 'error');
+            renderTasks(tasks);
+        });
 }
 
 function saveTasks() {
@@ -94,6 +116,7 @@ function saveTasks() {
     );
 }
 
+// eslint-disable-next-line no-unused-vars
 function readTasks() {
     if (localStorage.tasks) {
         try {
