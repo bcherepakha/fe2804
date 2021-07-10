@@ -3,7 +3,7 @@ export default class TasksAPI {
         this.base = 'https://5d9969125641430014051850.mockapi.io/tasks';
     }
 
-    getTasks({ page, limit } = {}) {
+    getTasks({ page, limit, completed } = {}) {
         const params = new URLSearchParams();
 
         if (page) {
@@ -12,6 +12,10 @@ export default class TasksAPI {
 
         if (limit) {
             params.append('limit', limit);
+        }
+
+        if (typeof completed === 'boolean') {
+            params.append('completed', completed);
         }
 
         return fetch(`${this.base}?${params.toString()}`)

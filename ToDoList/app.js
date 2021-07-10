@@ -4,12 +4,14 @@ import Task from './task.js';
 import Filter from './filter.js';
 import TasksAPI from './tasksAPI.js';
 import Pagination from './pagination.js';
+import Counter from './counter.js';
 
 const notifications = new Notifications();
 const addTask = new AddTaskForm();
 const filter = new Filter( onFilterChange );
 const api = new TasksAPI();
 const pagination = new Pagination(document.querySelector('.pagination'));
+const counter = new Counter();
 const todoListEl = document.querySelector('.todo-list');
 let tasks = [];
 
@@ -18,17 +20,44 @@ addTask.addEventListener('addTask', onAddTask);
 
 console.log( pagination );
 
-pagination.render();
-
 // addLocalTasks(readTasks());
 
+window.addEventListener('popstate', onPageChange);
+pagination.onChange = onPageChange;
+
+putTitle();
+counter.render();
+console.log('page loaded');
 getTaskFromServer();
+pagination.render();
+
+function onPageChange() {
+    filter.changeFilter(location.hash);
+    tasks = [];
+    console.log('page changed');
+    getTaskFromServer();
+    pagination.render();
+    putTitle();
+}
+
+function putTitle() {
+    document.title = `ToDo List. Page ${pagination.page}. Filter: ${filter.value}`;
+}
 
 function getTaskFromServer() {
-    return api.getTasks({
-            page: pagination.page,
-            limit: pagination.limit
-        })
+    console.log('getTaskFromServer');
+    const params = {
+        page: pagination.page,
+        limit: pagination.limit,
+    };
+
+    if (filter.value === '#/completed') {
+        params.completed = true;
+    } else if (filter.value === '#/active') {
+        params.completed = false;
+    }
+
+    return api.getTasks(params)
         .then(tasksObj => {
             addLocalTasks(tasksObj);
         })
@@ -42,7 +71,11 @@ function onCompleteAllStatusChange() {
 }
 
 function onFilterChange() {
-    renderTasks(tasks);
+    tasks = [];
+    console.log('filter change');
+    getTaskFromServer();
+    pagination.render();
+    putTitle();
 }
 
 function isTaskShown(task) {
@@ -91,6 +124,7 @@ async function onTaskChange(task) {
         const newData = await api.changeTask(task.data);
 
         tasks = [];
+        console.log('task changed');
         await getTaskFromServer();
     } catch(error) {
         console.log(error);
@@ -100,10 +134,7 @@ async function onTaskChange(task) {
 
 function onTaskDestroy(task) {
     api.deleteTask(task.data.id)
-        .then(function onSuccess() {
-            tasks = tasks.filter(t => t !== task);
-            renderTasks(tasks);
-        })
+        .then(onFilterChange)
         .catch(function onError(error) {
             notifications.addNote(error, 'error');
             renderTasks(tasks);
@@ -152,10 +183,13 @@ function renderTasks(tasks) {
             return 0;
         }
     });
-    const shownTasks = sortedTasks.filter(t => isTaskShown(t))
-        .map(t => t.render());
+    const shownTasks = sortedTasks.filter(t => isTaskShown(t));
 
     todoListEl.innerText = '';
     // todoListEl.append.apply(todoListEl, shownTasks);
-    todoListEl.append(...shownTasks);
+    counter.setValues(
+        shownTasks.length,
+        shownTasks.filter(t => t.data.completed).length
+    );
+    todoListEl.append(...shownTasks.map(t => t.render()));
 }

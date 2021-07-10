@@ -25,7 +25,11 @@ export default class Filter {
         this.onFilterChange = onFilterChange;
     }
 
-    changeFilterHandler(lnk) {
+    changeFilterHandler(lnk, e) {
+        e.preventDefault();
+
+        history.pushState(null, '', lnk.href);
+
         this.changeFilter(lnk.hash);
     }
 

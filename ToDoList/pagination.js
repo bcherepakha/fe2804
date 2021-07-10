@@ -33,7 +33,19 @@ export default class Pagination {
             el.href = `?page=${page}&limit=${limit}${location.hash}`;
         }
 
+        el.addEventListener('click', this.onClick.bind(this));
+
         return el;
+    }
+
+    onClick(e) {
+        e.preventDefault();
+
+        history.pushState(null, '', e.currentTarget.href);
+
+        if (this.onChange) {
+            return this.onChange();
+        }
     }
 
     render() {
