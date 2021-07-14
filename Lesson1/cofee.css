@@ -1,0 +1,95 @@
+body {
+    margin: 0;
+}
+
+.header {
+    display: flex;
+}
+
+.header__logo {
+    flex: 387 0 0;
+
+    position: relative;
+}
+
+.header__title {
+    position: absolute;
+    bottom: 64px;
+    right: 0;
+
+    transform: translateX(50.8772%);
+
+    z-index: 5;
+}
+
+.header__title span {
+    display: block;
+    padding: 0 15px;
+}
+
+.header__title-strong {
+    background: #C7A17A;
+}
+
+.header__logo-lnk {
+    display: block;
+
+    max-width: 110px;
+
+    margin: 74px auto 0;
+}
+
+.header__logo-img {
+    display: block;
+    width: 100%;
+}
+
+.header__intro {
+    flex: 690 0 0;
+    aspect-ratio: 560 / 315;
+
+    min-height: 400px;
+
+    position: relative;
+}
+
+.header__player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    z-index: 1;
+}
+
+.header__nav {
+    flex: 323 0 0;
+    background: #415167;
+}
+
+.slider {
+    display: block;
+    overflow: hidden;
+}
+
+.slider__body {
+    display: flex;
+
+    transition: transform .8s linear 0s;
+}
+
+.cards {
+    margin-left: 200px;
+}
+
+.card {
+    flex: 0 0 360px;
+    height: 582px;
+
+    background: green;
+}
+
+.card + .card {
+    margin-left: 20px;
+}

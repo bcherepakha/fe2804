@@ -6,6 +6,7 @@
     <meta name="description" content="Try to create app as http://todomvc.com/">
     <title>ToDo List</title>
     <link rel="stylesheet" href="./todoList.css">
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css">
     <!-- Server: https://mockapi.io/projects/5d9969125641430014051851 -->
     <script src="notifications.js" type="module"></script>
     <script src="filter.js" type="module"></script>
@@ -17,7 +18,7 @@
     <script src="app.js" type="module"></script>
 </head>
 <body>
-    <div class="todoapp">
+    <div class="todoapp" hidden>
         <h1>todos</h1>
         <form action="" method="GET" class="header">
             <label class="complete-all-label">
@@ -79,7 +80,7 @@
         </footer>
     </div>
 
-    <div class="pagination">
+    <div class="pagination" hidden>
         <a href="?page=4&limit=10">Previous page</a>
         <a href="">1</a>
         <a href="">2</a>
@@ -103,5 +104,11 @@
             Some text
         </div> -->
     </div>
+
+    <div id="mocha"></div>
+    <script defer src="../node_modules/mocha/mocha.js"></script>
+    <script defer src="../node_modules/chai/chai.js"></script>
+    <script src="tests.spec.js" type="module"></script>
+
 </body>
 </html>

@@ -44,7 +44,7 @@ function putTitle() {
     document.title = `ToDo List. Page ${pagination.page}. Filter: ${filter.value}`;
 }
 
-function getTaskFromServer() {
+export function getTaskFromServer() {
     console.log('getTaskFromServer');
     const params = {
         page: pagination.page,
