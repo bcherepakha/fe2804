@@ -93,3 +93,7 @@ body {
 .card + .card {
     margin-left: 20px;
 }
+
+.card:first-child {
+    background: greenyellow;
+}
